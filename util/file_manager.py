@@ -1,4 +1,5 @@
 import pandas as pd
+
 class CSVFileManager:
   def __init__(self,path: str):
     self.path = path

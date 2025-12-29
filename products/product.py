@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from products.food_package import FoodPackage, Wrapping, Glass, Bottle, Box
+from food_package import FoodPackage, Wrapping, Glass, Bottle, Box
 
 class Product(ABC):
     def __init__(self,id:str,name:str,price:float):
