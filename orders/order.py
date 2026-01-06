@@ -1,5 +1,5 @@
-from users import *
-from products import *
+from users import*
+from products import*
 
 class Order:
   def __init__(self, cashier:Cashier, customer:Customer):
