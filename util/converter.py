@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-#Write your code here
+
+import pandas as pd
 
 class Converter(ABC):
   @abstractmethod
@@ -11,13 +12,24 @@ class Converter(ABC):
 
 class CashierConverter(Converter):
   def convert(self,dataFrame):    
-    #Write your code here
+    list_cashiers = []
+    for _, row in dataFrame.iterrows():
+      list_cashiers.append(row.to_dict())
+      return list_cashiers
     pass
 
 class CustomerConverter(Converter):
-  #Write your code here
+  def convert(self,dataFrame,*args) -> list:
+    list_users = []
+    for _, row in dataFrame.iterrows():
+      list_users.append(row.to_dict())
+    return list_users
   pass
 
 class ProductConverter(Converter):
-  #Write your code here
+  def convert(self, dataFrame: pd.DataFrame, *args) -> list:
+    list_products = []
+    for _, row in dataFrame.iterrows():
+      list_products.append(row.to_dict())
+    return list_products
   pass
