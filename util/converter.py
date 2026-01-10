@@ -1,22 +1,45 @@
+import pandas as pd
+from abc import ABC, abstractmethod
 from users.user import Cashier, Customer
 from products.product import Hamburger, Soda, Drink, HappyMeal
 
-class Converter:
-    def convert(self, dataFrame, entity_type) -> list:
-        objects = []
-        for _, row in dataFrame.iterrows():
-            if entity_type == 'Cashier':
-                objects.append(Cashier(str(row['dni']), row['name'], row['age'], row['timetable'], row['salary']))
-            elif entity_type == 'Customer':
-                objects.append(Customer(str(row['dni']), row['name'], row['age'], row['email'], row['postal_code']))
-            elif entity_type == 'Hamburger':
-                objects.append(Hamburger(row['id'], row['name'], row['price']))
-            elif entity_type == 'Soda':
-                objects.append(Soda(row['id'], row['name'], row['price']))
-            # ... añadir Drink y HappyMeal igual
-        return objects
+class Converter(ABC):
+    @abstractmethod
+    def convert(self, dataFrame: pd.DataFrame, entity_type: str):
+        pass
 
-    def print(self, object_list):
-        for obj in object_list:
-            if hasattr(obj, 'describe'): print(obj.describe())
-            else: print(f"Producte - Tipus: {obj.type()}, Nom: {obj.name}, Id: {obj.id}, Preu: {obj.price}")
+    def print(self, objects_list):
+        for obj in objects_list:
+            if hasattr(obj, 'describe'):
+                print(obj.describe())
+            else:
+                print(f"Producte - ID: {obj.id}, Nom: {obj.name}, Preu: {obj.price}€")
+
+class CashierConverter(Converter):
+    def convert(self, dataFrame, entity_type):
+        cashiers = []
+        for _, row in dataFrame.iterrows():
+            cashiers.append(Cashier(row['dni'], row['name'], row['age'], row['timetable'], row['salary']))
+        return cashiers
+
+class CustomerConverter(Converter):
+    def convert(self, dataFrame, entity_type):
+        customers = []
+        for _, row in dataFrame.iterrows():
+            customers.append(Customer(row['dni'], row['name'], row['age'], row['email'], row['postalcode']))
+        return customers
+
+class ProductConverter(Converter):
+    def convert(self, dataFrame, entity_type):
+        products = []
+        for _, row in dataFrame.iterrows():
+            # Depenent de l'entity_type (nom del fitxer), creem un objecte o un altre
+            if entity_type == 'hamburgers':
+                products.append(Hamburger(row['id'], row['name'], row['price']))
+            elif entity_type == 'sodas':
+                products.append(Soda(row['id'], row['name'], row['price']))
+            elif entity_type == 'drinks':
+                products.append(Drink(row['id'], row['name'], row['price']))
+            elif entity_type == 'happyMeal':
+                products.append(HappyMeal(row['id'], row['name'], row['price']))
+        return products
