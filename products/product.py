@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from food_package import FoodPackage, Wrapping, Glass, Bottle, Box
+from products.food_package import FoodPackage, Wrapping, Bottle, Glass, Box
 
 class Product(ABC):
     def __init__(self,id:str,name:str,price:float):
       self.id = id
       self.name = name
-      self.price = price     
+      self.price = price
     
     def describe(self):
         return f"Product - Type: {self.type()}, Name: {self.name}, Id: {self.id} , Price: {self.price} , {self.foodPackage().describe()}."   

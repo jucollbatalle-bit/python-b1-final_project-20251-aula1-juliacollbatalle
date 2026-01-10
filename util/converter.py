@@ -1,35 +1,22 @@
-from abc import ABC, abstractmethod
+from users.user import Cashier, Customer
+from products.product import Hamburger, Soda, Drink, HappyMeal
 
-import pandas as pd
+class Converter:
+    def convert(self, dataFrame, entity_type) -> list:
+        objects = []
+        for _, row in dataFrame.iterrows():
+            if entity_type == 'Cashier':
+                objects.append(Cashier(str(row['dni']), row['name'], row['age'], row['timetable'], row['salary']))
+            elif entity_type == 'Customer':
+                objects.append(Customer(str(row['dni']), row['name'], row['age'], row['email'], row['postal_code']))
+            elif entity_type == 'Hamburger':
+                objects.append(Hamburger(row['id'], row['name'], row['price']))
+            elif entity_type == 'Soda':
+                objects.append(Soda(row['id'], row['name'], row['price']))
+            # ... añadir Drink y HappyMeal igual
+        return objects
 
-class Converter(ABC):
-  @abstractmethod
-  def convert(self,dataFrame,*args) -> list:
-      pass  
-  def print(self, objects):
-    for item in objects:
-      print(item.describe())
-
-class CashierConverter(Converter):
-  def convert(self,dataFrame):    
-    list_cashiers = []
-    for _, row in dataFrame.iterrows():
-      list_cashiers.append(row.to_dict())
-      return list_cashiers
-    pass
-
-class CustomerConverter(Converter):
-  def convert(self,dataFrame,*args) -> list:
-    list_users = []
-    for _, row in dataFrame.iterrows():
-      list_users.append(row.to_dict())
-    return list_users
-  pass
-
-class ProductConverter(Converter):
-  def convert(self, dataFrame: pd.DataFrame, *args) -> list:
-    list_products = []
-    for _, row in dataFrame.iterrows():
-      list_products.append(row.to_dict())
-    return list_products
-  pass
+    def print(self, object_list):
+        for obj in object_list:
+            if hasattr(obj, 'describe'): print(obj.describe())
+            else: print(f"Producte - Tipus: {obj.type()}, Nom: {obj.name}, Id: {obj.id}, Preu: {obj.price}")
