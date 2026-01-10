@@ -14,27 +14,38 @@ class PrepareOrder:
       self.customers = []
       self.products = []
     
-    def load_data(self):                            #We update Cashiers, Customers and Products
+    def load_data(self):                            #We upload Cashiers, Customers and Products
       df_cashiers = self.file_manager.read('data/cashiers.csv')
       self.cashiers = self.cashier_converter.convert(df_cashiers, 'Cashier')
+      print(f'Cashiers data has been succesfully uploaded: {len(self.cashiers)}')
       
       df_customers = self.file_manager.read('data/customers.csv')
       self.customers = self.customer_converter.convert(df_customers, 'Customer')
+      print(f'Customers data has been succesfully uploaded: {len(self.customers)}')
       
-      df_products = self.file_manager.read('data/products.csv')
-      self.products = self.product_converter.convert(df_products, 'Products')
+      product_files = ['hamburgers', 'sodas', 'drinks', 'happyMeal']
+      for product_type in product_files:
+            path = f'data/{product_type}.csv'
+            
+            # Llegim el CSV corresponent (hamburgers.csv, etc.)
+            df_temp = self.file_manager.read(path)
+            
+            # Si el fitxer no està buit, convertim i afegim a la llista global
+            if not df_temp.empty:
+                new_prods = self.product_converter.convert(df_temp, product_type)
+                self.products.extend(new_prods)
 
       print('The system has been succesfully updated')
-
+      
     def search_cashier(self, dni):
       for cashier in self.cashiers:
-        if cashier.dni == dni:
+        if str(cashier.dni).strip() == str(dni).strip():
           return cashier
         return None
   
     def search_customer(self, dni):
       for customer in self.customers:
-        if customer.dni == dni:
+        if str(customer.dni).strip() == str(dni).strip():
           return customer
         return None
 
@@ -55,7 +66,7 @@ class PrepareOrder:
         adding = True
         while adding:
           product_id = input('Introduce the identification of the product')
-          product_obj = next((product for product in self.products if product.id == product_id), None)
+          product_obj = next((product for product in self.products if str(product.id).strip() == str(product_id).strip()), None)
 
           if product_obj:
              order.add(product_obj)
