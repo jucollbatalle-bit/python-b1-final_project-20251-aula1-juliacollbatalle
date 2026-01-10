@@ -27,10 +27,8 @@ class PrepareOrder:
       for product_type in product_files:
             path = f'data/{product_type}.csv'
             
-            # Llegim el CSV corresponent (hamburgers.csv, etc.)
             df_temp = self.file_manager.read(path)
             
-            # Si el fitxer no està buit, convertim i afegim a la llista global
             if not df_temp.empty:
                 new_prods = self.product_converter.convert(df_temp, product_type)
                 self.products.extend(new_prods)
@@ -41,13 +39,13 @@ class PrepareOrder:
       for cashier in self.cashiers:
         if str(cashier.dni).strip() == str(dni).strip():
           return cashier
-        return None
+      return None
   
     def search_customer(self, dni):
       for customer in self.customers:
         if str(customer.dni).strip() == str(dni).strip():
           return customer
-        return None
+      return None
 
     def create_order(self):
       dni_cashier = input('Introduce the cashiers DNI')

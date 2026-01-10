@@ -30,7 +30,7 @@ class Soda(Product):
         super().__init__(id,name,price)
     def type(self) -> str:
         return 'Soda'
-    def foodPachage(self) -> FoodPackage:
+    def foodPackage(self) -> FoodPackage:
         return Glass()
     pass
 
@@ -39,7 +39,7 @@ class Drink(Product):
         super().__init__(id,name,price)
     def type(self) -> str:
         return 'Drink'
-    def foodPachage(self) -> FoodPackage:
+    def foodPackage(self) -> FoodPackage:
         return Bottle()
     pass
 
@@ -48,6 +48,6 @@ class HappyMeal(Product):
         super().__init__(id,name,price)
     def type(self) -> str:
         return 'Happy Meal'
-    def foodPachage(self) -> FoodPackage:
+    def foodPackage(self) -> FoodPackage:
         return Box()
     pass
