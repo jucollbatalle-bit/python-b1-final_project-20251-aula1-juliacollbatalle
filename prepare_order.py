@@ -2,10 +2,10 @@ from util.file_manager import CSVFileManager
 from orders.order import Order
 from util.converter import CashierConverter, CustomerConverter, ProductConverter
 
-    
+# We initiate the code
 class PrepareOrder:
-    def __init__(self):
-      self.file_manager = CSVFileManager()          # We initiate the code
+    def __init__(self):                              
+      self.file_manager = CSVFileManager()         
       self.cashier_converter = CashierConverter()
       self.customer_converter = CustomerConverter()
       self.product_converter = ProductConverter()
@@ -14,42 +14,44 @@ class PrepareOrder:
       self.customers = []
       self.products = []
     
-    def load_data(self):                            #We upload Cashiers, Customers and Products
+#We upload Cashiers, Customers and Products
+    def load_data(self):                            
       df_cashiers = self.file_manager.read('data/cashiers.csv')
       self.cashiers = self.cashier_converter.convert(df_cashiers, 'Cashier')
-      print(f'Cashiers data has been succesfully uploaded: {len(self.cashiers)}')
+      print(f'Cashiers data has been succesfully uploaded: {len(self.cashiers)}')  #Debug: point reached successfully
       
       df_customers = self.file_manager.read('data/customers.csv')
       self.customers = self.customer_converter.convert(df_customers, 'Customer')
-      print(f'Customers data has been succesfully uploaded: {len(self.customers)}')
+      print(f'Customers data has been succesfully uploaded: {len(self.customers)}')  #Debug: point reached successfully
       
       product_files = ['hamburgers', 'sodas', 'drinks', 'happyMeal']
       for product_type in product_files:
             path = f'data/{product_type}.csv'
-            
             df_temp = self.file_manager.read(path)
             
             if not df_temp.empty:
                 new_prods = self.product_converter.convert(df_temp, product_type)
                 self.products.extend(new_prods)
 
-      print('The system has been succesfully updated')
+      print('The system has been succesfully updated')  #Verification print
       
     def search_cashier(self, dni):
       for cashier in self.cashiers:
         if str(cashier.dni).strip() == str(dni).strip():
+          print(f'{cashier.dni} - {cashier.name} - {cashier.age} - {cashier.timeTable} - {cashier.salary}')
           return cashier
       return None
   
     def search_customer(self, dni):
       for customer in self.customers:
         if str(customer.dni).strip() == str(dni).strip():
+          print(f'{customer.dni} - {customer.name} - {customer.age} - {customer.email} - {customer.postalCode}')
           return customer
       return None
 
     def create_order(self):
       dni_cashier = input('Introduce the cashiers DNI')
-      cashier = self.search_cashier(dni_cashier)
+      cashier = self.search_cashier(dni_cashier) 
       
       dni_customer = input('Introduce customers DNI')
       customer = self.search_customer(dni_customer)
